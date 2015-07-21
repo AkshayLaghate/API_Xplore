@@ -1,23 +1,27 @@
 package com.indcoders.apixploremashape;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.app.Fragment;
-import android.support.v7.widget.RecyclerView;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ListView;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.etsy.android.grid.StaggeredGridView;
 import com.squareup.okhttp.OkHttpClient;
@@ -28,14 +32,13 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import it.gmariotti.cardslib.library.cards.material.MaterialLargeImageCard;
-import it.gmariotti.cardslib.library.view.CardViewNative;
 
 
 /**
@@ -51,20 +54,20 @@ public class GridFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    @Bind(R.id.grid_view)
+    StaggeredGridView recyclerView;
+    ProgressDialog pd;
+    ArrayList<String> names, descs, prices,links,apiThumb,author,authorThumb;
+    Bitmap[] imgs;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
-    @Bind(R.id.my_recycler_view)
-    ListView recyclerView;
+    public GridFragment() {
+        // Required empty public constructor
+    }
 
-    ProgressDialog pd;
-
-    ArrayList<String> names,descs,prices;
-    Bitmap[] imgs;
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -83,10 +86,6 @@ public class GridFragment extends Fragment {
         return fragment;
     }
 
-    public GridFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,8 +102,8 @@ public class GridFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_grid, container, false);
-        ButterKnife.bind(this,v);
+        View v = inflater.inflate(R.layout.fragment_grid, container, false);
+        ButterKnife.bind(this, v);
 
 
         pd = new ProgressDialog(getActivity());
@@ -113,9 +112,50 @@ public class GridFragment extends Fragment {
         names = new ArrayList<>();
         descs = new ArrayList<>();
         prices = new ArrayList<>();
+        links = new ArrayList<>();
+        apiThumb = new ArrayList<>();
+        author = new ArrayList<>();
+        authorThumb = new ArrayList<>();
+
+
 
         new LoadApi().execute();
+
+        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                openDetails(position);
+            }
+        });
         return v;
+    }
+
+    public void showDeatils(final int position) {
+
+        final Dialog dialog = new Dialog(getActivity());
+
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawableResource(
+                android.R.color.transparent);
+
+        dialog.setContentView(R.layout.details_dialog);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+
+        TextView tvDesc = (TextView) dialog.findViewById(R.id.tvDescDialog);
+        Button bMash = (Button) dialog.findViewById(R.id.bMashape);
+        TextView tvTitleDialog = (TextView) dialog.findViewById(R.id.tvTitleDialog);
+
+        bMash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(links.get(position)));
+                startActivity(browserIntent);
+            }
+        });
+        tvTitleDialog.setText(names.get(position));
+        tvDesc.setText(descs.get(position));
+        dialog.show();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -123,6 +163,22 @@ public class GridFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    public void openDetails(int position){
+
+        Bundle bag = new Bundle();
+        bag.putString("title",names.get(position));
+        bag.putString("desc",descs.get(position));
+        bag.putString("apiThumb",apiThumb.get(position));
+        bag.putString("author",author.get(position));
+        bag.putString("authorThumb",authorThumb.get(position));
+        bag.putString("price",prices.get(position));
+        bag.putString("link",links.get(position));
+
+        Intent i = new Intent("com.indcoders.apixploremashape.DetailActivity");
+        i.putExtras(bag);
+        startActivity(i);
     }
 
     @Override
@@ -157,8 +213,9 @@ public class GridFragment extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    public class LoadApi extends AsyncTask<Void,Void,Void>{
+    public class LoadApi extends AsyncTask<Void, Void, Void> {
 
+        Boolean empty = false;
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -169,7 +226,7 @@ public class GridFragment extends Fragment {
         @Override
         protected Void doInBackground(Void... params) {
 
-            String url = "https://rokity-mashape-v1.p.mashape.com/?query=explore";
+            String url = mParam2;
             String jsonStr = null;
 
             OkHttpClient client = new OkHttpClient();
@@ -177,7 +234,7 @@ public class GridFragment extends Fragment {
 
             Request request = new Request.Builder()
                     .url(url)
-                    .header("X-Mashape-Key","tp491p4oyzmshCnzBwZ4w3u8Yuyjp1Pi5cajsnkrBifrOXLcSr")
+                    .header("X-Mashape-Key", "tp491p4oyzmshCnzBwZ4w3u8Yuyjp1Pi5cajsnkrBifrOXLcSr")
                     .header("Accept", "application/json")
                     .build();
 
@@ -198,10 +255,15 @@ public class GridFragment extends Fragment {
                     // Getting JSON Array node
                     JSONArray dataArray = jsonObj.getJSONArray("name");
 
+                    if(dataArray.length() == 0){
+                       empty = true;
+
+                    }
+
                     // looping through all results
                     for (int i = 0; i < dataArray.length(); i++) {
 
-                       Log.e("Api no : " + i, "" + dataArray.get(i));
+                        Log.e("Api no : " + i, "" + dataArray.get(i));
                         names.add(dataArray.get(i).toString());
 
                     }
@@ -212,9 +274,11 @@ public class GridFragment extends Fragment {
                     for (int i = 0; i < dataArray.length(); i++) {
 
                         Log.e("Api no : " + i, "" + dataArray.get(i));
-
+                        apiThumb.add(dataArray.get(i).toString());
                         try {
                             imgs[i] = Picasso.with(getActivity()).load(dataArray.get(i).toString()).get();
+
+
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -241,6 +305,33 @@ public class GridFragment extends Fragment {
 
                     }
 
+                    dataArray = null;
+                    dataArray = jsonObj.getJSONArray("links");
+                    for (int i = 0; i < dataArray.length(); i++) {
+
+                        Log.e("Api no : " + i, "" + dataArray.get(i));
+                        links.add(dataArray.get(i).toString());
+
+                    }
+
+                    dataArray = null;
+                    dataArray = jsonObj.getJSONArray("owner");
+                    for (int i = 0; i < dataArray.length(); i++) {
+
+                        Log.e("Api no : " + i, "" + dataArray.get(i));
+                        author.add(dataArray.get(i).toString());
+
+                    }
+
+                    dataArray = null;
+                    dataArray = jsonObj.getJSONArray("image_owner");
+                    for (int i = 0; i < dataArray.length(); i++) {
+
+                        Log.e("Api no : " + i, "" + dataArray.get(i));
+                        authorThumb.add(dataArray.get(i).toString());
+
+                    }
+
 
                     try {
 
@@ -258,6 +349,7 @@ public class GridFragment extends Fragment {
                 }
             } else {
                 Log.w("ServiceHandler", "Couldn't get any data from the url");
+                empty = true;
             }
 
             return null;
@@ -266,6 +358,9 @@ public class GridFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+            if(empty) {
+                Toast.makeText(getActivity(), "No results", Toast.LENGTH_SHORT).show();
+            }
             pd.dismiss();
             recyclerView.setAdapter(new GridAdapter());
             recyclerView.invalidateViews();
@@ -310,7 +405,7 @@ public class GridFragment extends Fragment {
             }
 
 
-            CardViewNative cardView = (CardViewNative) convertView.findViewById(R.id.carddemo_largeimage);
+            /*CardViewNative cardView = (CardViewNative) convertView.findViewById(R.id.carddemo_largeimage);
 
 
             MaterialLargeImageCard card =
@@ -331,11 +426,26 @@ public class GridFragment extends Fragment {
                             }).build();
 
 
-            cardView.setCard(card);
+            cardView.setCard(card);*/
+
+            ImageView ivThumb = (ImageView) convertView.findViewById(R.id.ivThumb);
+            TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
+            TextView tvDesc = (TextView) convertView.findViewById(R.id.tvDesc);
+            TextView tvPrice = (TextView) convertView.findViewById(R.id.tvPrice);
+
+            ivThumb.setImageBitmap(imgs[position]);
+            tvName.setText(names.get(position));
+            String desc = descs.get(position);
+            String upToNCharacters = desc.substring(0, Math.min(desc.length(), 100)) + "...";
+
+            tvDesc.setText(upToNCharacters);
+
+            tvPrice.setText(prices.get(position));
 
             return convertView;
 
         }
 
     }
+
 }

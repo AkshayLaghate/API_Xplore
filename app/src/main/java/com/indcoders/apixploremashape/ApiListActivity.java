@@ -1,23 +1,25 @@
 package com.indcoders.apixploremashape;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class ApiListActivity extends ActionBarActivity
@@ -48,15 +50,41 @@ public class ApiListActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
+
     @Override
-    public void onNavigationDrawerItemSelected(int position) {
+    public void onNavigationDrawerItemSelected(int position,String arg) {
         // update the main content by replacing fragments
+        mTitle = arg;
         android.app.Fragment fragment = null;
         android.app.FragmentManager fragmentManager = getFragmentManager();
-        switch(position) {
+        String urlXplore = "https://rokity-mashape-v1.p.mashape.com/?query=explore";
+        String urlTag = "https://rokity-mashape-v1.p.mashape.com/?parameter="+arg+"&query=find&type=tags";
+        switch (position) {
             default:
+                break;
             case 0:
-                fragment = new GridFragment();
+                fragment = GridFragment.newInstance(arg,urlXplore);
+                break;
+            case 1:
+            case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+            case 16:
+            case 17:
+            case 18:
+            case 19:
+                fragment = GridFragment.newInstance(arg,urlTag);
                 break;
 
         }
@@ -68,13 +96,13 @@ public class ApiListActivity extends ActionBarActivity
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
-                mTitle = getString(R.string.title_section1);
+
                 break;
             case 2:
-                mTitle = getString(R.string.title_section2);
+
                 break;
             case 3:
-                mTitle = getString(R.string.title_section3);
+
                 break;
         }
     }
@@ -111,6 +139,40 @@ public class ApiListActivity extends ActionBarActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.action_example) {
+            final Dialog dialog = new Dialog(ApiListActivity.this);
+
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.getWindow().setBackgroundDrawableResource(
+                    android.R.color.transparent);
+
+            dialog.setContentView(R.layout.search);
+            dialog.setCancelable(true);
+            dialog.setCanceledOnTouchOutside(true);
+
+            final EditText etSearch = (EditText) dialog.findViewById(R.id.etSearch);
+            Button bSearch = (Button) dialog.findViewById(R.id.bSearch);
+
+            bSearch.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    dialog.dismiss();
+                    mTitle = "Search : "+etSearch.getText().toString();
+                    getSupportActionBar().setTitle(mTitle);
+                    android.app.Fragment fragment = null;
+                    android.app.FragmentManager fragmentManager = getFragmentManager();
+                    String urlSearch = "https://rokity-mashape-v1.p.mashape.com/?parameter="+etSearch.getText().toString()+"&query=find&type=search";
+                    fragment = GridFragment.newInstance("Search",urlSearch);
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.container, fragment)
+                            .commit();
+                }
+            });
+            dialog.show();
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -130,6 +192,9 @@ public class ApiListActivity extends ActionBarActivity
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
 
+        public PlaceholderFragment() {
+        }
+
         /**
          * Returns a new instance of this fragment for the given section
          * number.
@@ -140,9 +205,6 @@ public class ApiListActivity extends ActionBarActivity
             args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
-        }
-
-        public PlaceholderFragment() {
         }
 
         @Override

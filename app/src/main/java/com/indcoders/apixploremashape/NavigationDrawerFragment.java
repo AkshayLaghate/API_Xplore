@@ -1,16 +1,16 @@
 package com.indcoders.apixploremashape;
 
-import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -58,6 +57,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
 
     public NavigationDrawerFragment() {
     }
@@ -106,8 +106,24 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section1),
                         getString(R.string.title_section2),
                         getString(R.string.title_section3),
-                }));
+                        getString(R.string.title_section4),
+                        getString(R.string.title_section5),
+                        getString(R.string.title_section6),
+                        getString(R.string.title_section7),
+                        getString(R.string.title_section8),
+                        getString(R.string.title_section9),
+                        getString(R.string.title_section10),
+                        getString(R.string.title_section11),
+                        getString(R.string.title_section12),
+                        getString(R.string.title_section13),
+                        getString(R.string.title_section14),
+                        getString(R.string.title_section15),
+                        getString(R.string.title_section16),
+                        getString(R.string.title_section17),
+                        getString(R.string.title_section18),
+                        getString(R.string.title_section19)}));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
         return mDrawerListView;
     }
 
@@ -170,6 +186,10 @@ public class NavigationDrawerFragment extends Fragment {
 
                 getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
+
+
+
+
         };
 
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
@@ -189,16 +209,41 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
     }
 
+
+
     private void selectItem(int position) {
         mCurrentSelectedPosition = position;
+        String arg = null;
+        String[] vals = new String[]{
+                getString(R.string.title_section1),
+                getString(R.string.title_section2),
+                getString(R.string.title_section3),
+                getString(R.string.title_section4),
+                getString(R.string.title_section5),
+                getString(R.string.title_section6),
+                getString(R.string.title_section7),
+                getString(R.string.title_section8),
+                getString(R.string.title_section9),
+                getString(R.string.title_section10),
+                getString(R.string.title_section11),
+                getString(R.string.title_section12),
+                getString(R.string.title_section13),
+                getString(R.string.title_section14),
+                getString(R.string.title_section15),
+                getString(R.string.title_section16),
+                getString(R.string.title_section17),
+                getString(R.string.title_section18),
+                getString(R.string.title_section19),
+        };
         if (mDrawerListView != null) {
             mDrawerListView.setItemChecked(position, true);
+            arg = vals[position];
         }
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
         if (mCallbacks != null) {
-            mCallbacks.onNavigationDrawerItemSelected(position);
+            mCallbacks.onNavigationDrawerItemSelected(position,arg);
         }
     }
 
@@ -278,6 +323,8 @@ public class NavigationDrawerFragment extends Fragment {
         /**
          * Called when an item in the navigation drawer is selected.
          */
-        void onNavigationDrawerItemSelected(int position);
+        void onNavigationDrawerItemSelected(int position, String s);
     }
+
 }
+

@@ -1,10 +1,11 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.indcoders.apixploremashape.GridFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <!--<com.etsy.android.grid.StaggeredGridView xmlns:android="http://schemas.android.com/apk/res/android"
+    <com.etsy.android.grid.StaggeredGridView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/grid_view"
         android:layout_width="match_parent"
@@ -12,12 +13,21 @@
         android:layout_gravity="center"
         app:column_count_landscape="3"
         app:column_count_portrait="2"
-        app:item_margin="8dp" />-->
+        app:item_margin="5dp"
+        android:background="@color/blue_grey_100" />
 
-    <ListView
-        android:id="@+id/my_recycler_view"
-        android:scrollbars="vertical"
+
+    <!--<GridView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/gridView"
+        android:layout_gravity="center"
+        android:numColumns="2"
+        android:verticalSpacing="10dp" />-->
+
+    <!--<ListView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
+        android:layout_height="match_parent"
+        android:elevation="5dp"
+        android:id="@+id/ListView"></ListView>-->
 </FrameLayout>

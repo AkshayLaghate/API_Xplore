@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
 <it.gmariotti.cardslib.library.view.CardViewNative xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card="http://schemas.android.com/apk/res-auto"
     android:id="@+id/carddemo_largeimage"
@@ -6,5 +7,68 @@
     android:layout_width="match_parent"
 
     android:layout_height="wrap_content"
-    card:card_layout_resourceID="@layout/native_material_largeimage_text_card"
-    android:padding="10dp" />
+    android:padding="10dp"
+    card:card_layout_resourceID="@layout/native_material_largeimage_text_card" />-->
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:alpha="0.9"
+    android:elevation="2dp"
+    card_view:cardBackgroundColor="@android:color/white"
+    card_view:cardElevation="2sp"
+    card_view:cardUseCompatPadding="true"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/tvName"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:id="@+id/ivThumb"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/tvDesc"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/tvPrice"
+            android:gravity="center_horizontal"
+            android:textColor="@color/grey_white_1000"
+            android:background="@color/blue_grey_900"
+            android:padding="5dp"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
+</android.support.v7.widget.CardView>

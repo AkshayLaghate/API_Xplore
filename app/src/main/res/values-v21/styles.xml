@@ -9,7 +9,6 @@
 
     <style name="MyActionBar"
         parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
         <item name="android:background"  tools:ignore="NewApi">@color/blue_grey_600</item>
         <item name="background">@color/blue_grey_600</item>
         <item name="homeAsUpIndicator">@drawable/ic_drawer</item>
