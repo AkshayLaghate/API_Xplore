@@ -2,15 +2,12 @@ package com.indcoders.apixploremashape;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+
 
 public class ApiListActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks, GridFragment.OnFragmentInteractionListener {
@@ -35,6 +32,7 @@ public class ApiListActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +40,7 @@ public class ApiListActivity extends ActionBarActivity
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        mTitle = "Popular";
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -52,18 +50,18 @@ public class ApiListActivity extends ActionBarActivity
 
 
     @Override
-    public void onNavigationDrawerItemSelected(int position,String arg) {
+    public void onNavigationDrawerItemSelected(int position, String arg) {
         // update the main content by replacing fragments
         mTitle = arg;
         android.app.Fragment fragment = null;
         android.app.FragmentManager fragmentManager = getFragmentManager();
         String urlXplore = "https://rokity-mashape-v1.p.mashape.com/?query=explore";
-        String urlTag = "https://rokity-mashape-v1.p.mashape.com/?parameter="+arg+"&query=find&type=tags";
+        String urlTag = "https://rokity-mashape-v1.p.mashape.com/?parameter=" + arg + "&query=find&type=tags";
         switch (position) {
             default:
                 break;
             case 0:
-                fragment = GridFragment.newInstance(arg,urlXplore);
+                fragment = GridFragment.newInstance(arg, urlXplore);
                 break;
             case 1:
             case 2:
@@ -84,7 +82,7 @@ public class ApiListActivity extends ActionBarActivity
             case 17:
             case 18:
             case 19:
-                fragment = GridFragment.newInstance(arg,urlTag);
+                fragment = GridFragment.newInstance(arg, urlTag);
                 break;
 
         }
@@ -136,13 +134,11 @@ public class ApiListActivity extends ActionBarActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_example) {
             final Dialog dialog = new Dialog(ApiListActivity.this);
 
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
             dialog.getWindow().setBackgroundDrawableResource(
                     android.R.color.transparent);
 
@@ -151,6 +147,7 @@ public class ApiListActivity extends ActionBarActivity
             dialog.setCanceledOnTouchOutside(true);
 
             final EditText etSearch = (EditText) dialog.findViewById(R.id.etSearch);
+
             Button bSearch = (Button) dialog.findViewById(R.id.bSearch);
 
             bSearch.setOnClickListener(new View.OnClickListener() {
@@ -158,12 +155,12 @@ public class ApiListActivity extends ActionBarActivity
                 public void onClick(View v) {
 
                     dialog.dismiss();
-                    mTitle = "Search : "+etSearch.getText().toString();
+                    mTitle = "Search : " + etSearch.getText().toString();
                     getSupportActionBar().setTitle(mTitle);
                     android.app.Fragment fragment = null;
                     android.app.FragmentManager fragmentManager = getFragmentManager();
-                    String urlSearch = "https://rokity-mashape-v1.p.mashape.com/?parameter="+etSearch.getText().toString()+"&query=find&type=search";
-                    fragment = GridFragment.newInstance("Search",urlSearch);
+                    String urlSearch = "https://rokity-mashape-v1.p.mashape.com/?parameter=" + etSearch.getText().toString() + "&query=find&type=search";
+                    fragment = GridFragment.newInstance("Search", urlSearch);
                     fragmentManager.beginTransaction()
                             .replace(R.id.container, fragment)
                             .commit();

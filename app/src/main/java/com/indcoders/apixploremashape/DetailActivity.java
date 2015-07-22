@@ -1,8 +1,11 @@
 package com.indcoders.apixploremashape;
 
+import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,6 +13,8 @@ import android.view.MenuItem;
 
 public class DetailActivity extends ActionBarActivity implements DetailActivityFragment.OnFragmentInteractionListener{
 
+    android.support.v7.app.ActionBar bar;
+    String link;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +27,7 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
         String author = bag.getString("author");
         String authorThumb = bag.getString("authorThumb");
         String price = bag.getString("price");
-        String link = bag.getString("link");
+        link = bag.getString("link");
 
         DetailActivityFragment fragment = DetailActivityFragment.newInstance(title, author, desc, apiThumb, authorThumb, price, link);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -31,6 +36,11 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
         fragmentTransaction.add(R.id.container, fragment);
         fragmentTransaction.commit();
 
+        bar = getSupportActionBar();
+        bar.setHomeButtonEnabled(true);
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setHomeAsUpIndicator(R.drawable.ic_chevron_left_white_36dp);
+        bar.setTitle("API Details");
     }
 
 
@@ -48,8 +58,14 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        if(id == android.R.id.home){
+            NavUtils.navigateUpFromSameTask(this);
+        }
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+            startActivity(browserIntent);
+
             return true;
         }
 

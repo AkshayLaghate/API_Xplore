@@ -22,7 +22,8 @@
         </activity>
         <activity
             android:name=".DetailActivity"
-            android:label="@string/title_activity_detail" >
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".ApiListActivity">
             <intent-filter>
                 <action android:name="com.indcoders.apixploremashape.DetailActivity"/>
                 <category android:name="android.intent.category.DEFAULT"/>

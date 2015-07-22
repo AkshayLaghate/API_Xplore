@@ -130,33 +130,6 @@ public class GridFragment extends Fragment {
         return v;
     }
 
-    public void showDeatils(final int position) {
-
-        final Dialog dialog = new Dialog(getActivity());
-
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawableResource(
-                android.R.color.transparent);
-
-        dialog.setContentView(R.layout.details_dialog);
-        dialog.setCancelable(true);
-        dialog.setCanceledOnTouchOutside(true);
-
-        TextView tvDesc = (TextView) dialog.findViewById(R.id.tvDescDialog);
-        Button bMash = (Button) dialog.findViewById(R.id.bMashape);
-        TextView tvTitleDialog = (TextView) dialog.findViewById(R.id.tvTitleDialog);
-
-        bMash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(links.get(position)));
-                startActivity(browserIntent);
-            }
-        });
-        tvTitleDialog.setText(names.get(position));
-        tvDesc.setText(descs.get(position));
-        dialog.show();
-    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -219,7 +192,7 @@ public class GridFragment extends Fragment {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pd.setMessage("Loading APIs....");
+            pd.setMessage("Xploring APIs....");
             pd.show();
         }
 
