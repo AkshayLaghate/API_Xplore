@@ -106,9 +106,9 @@ public class DetailActivityFragment extends Fragment {
 
 
         tvTitle.setText(mParam1);
-        tvAuthor.setText("Owner : "+mParam2);
+        tvAuthor.setText("Owner : " + mParam2);
         tvDesc.setText(mParam3);
-        tvPrice.setText("Price : "+mParam6);
+        tvPrice.setText("Price : " + mParam6);
 
         new LoadPics().execute();
 
@@ -128,7 +128,7 @@ public class DetailActivityFragment extends Fragment {
                 imgs[1] = Picasso.with(getActivity()).load(mParam5).get();
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e("Error: ",e.toString());
+                Log.e("Error: ", e.toString());
             }
 
             return null;

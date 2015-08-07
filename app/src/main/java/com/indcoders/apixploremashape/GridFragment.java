@@ -1,7 +1,6 @@
 package com.indcoders.apixploremashape;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,15 +9,12 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +28,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,7 +52,7 @@ public class GridFragment extends Fragment {
     @Bind(R.id.grid_view)
     StaggeredGridView recyclerView;
     ProgressDialog pd;
-    ArrayList<String> names, descs, prices,links,apiThumb,author,authorThumb;
+    ArrayList<String> names, descs, prices, links, apiThumb, author, authorThumb;
     Bitmap[] imgs;
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -95,7 +90,6 @@ public class GridFragment extends Fragment {
         }
 
 
-
     }
 
     @Override
@@ -118,7 +112,6 @@ public class GridFragment extends Fragment {
         authorThumb = new ArrayList<>();
 
 
-
         new LoadApi().execute();
 
         recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -138,16 +131,16 @@ public class GridFragment extends Fragment {
         }
     }
 
-    public void openDetails(int position){
+    public void openDetails(int position) {
 
         Bundle bag = new Bundle();
-        bag.putString("title",names.get(position));
-        bag.putString("desc",descs.get(position));
-        bag.putString("apiThumb",apiThumb.get(position));
-        bag.putString("author",author.get(position));
-        bag.putString("authorThumb",authorThumb.get(position));
-        bag.putString("price",prices.get(position));
-        bag.putString("link",links.get(position));
+        bag.putString("title", names.get(position));
+        bag.putString("desc", descs.get(position));
+        bag.putString("apiThumb", apiThumb.get(position));
+        bag.putString("author", author.get(position));
+        bag.putString("authorThumb", authorThumb.get(position));
+        bag.putString("price", prices.get(position));
+        bag.putString("link", links.get(position));
 
         Intent i = new Intent("com.indcoders.apixploremashape.DetailActivity");
         i.putExtras(bag);
@@ -189,6 +182,7 @@ public class GridFragment extends Fragment {
     public class LoadApi extends AsyncTask<Void, Void, Void> {
 
         Boolean empty = false;
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -228,8 +222,8 @@ public class GridFragment extends Fragment {
                     // Getting JSON Array node
                     JSONArray dataArray = jsonObj.getJSONArray("name");
 
-                    if(dataArray.length() == 0){
-                       empty = true;
+                    if (dataArray.length() == 0) {
+                        empty = true;
 
                     }
 
@@ -331,7 +325,7 @@ public class GridFragment extends Fragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            if(empty) {
+            if (empty) {
                 Toast.makeText(getActivity(), "No results", Toast.LENGTH_SHORT).show();
             }
             pd.dismiss();

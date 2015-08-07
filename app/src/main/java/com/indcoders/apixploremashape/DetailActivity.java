@@ -1,20 +1,19 @@
 package com.indcoders.apixploremashape;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class DetailActivity extends ActionBarActivity implements DetailActivityFragment.OnFragmentInteractionListener{
+public class DetailActivity extends ActionBarActivity implements DetailActivityFragment.OnFragmentInteractionListener {
 
     android.support.v7.app.ActionBar bar;
     String link;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,7 +57,7 @@ public class DetailActivity extends ActionBarActivity implements DetailActivityF
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if(id == android.R.id.home){
+        if (id == android.R.id.home) {
             NavUtils.navigateUpFromSameTask(this);
         }
         //noinspection SimplifiableIfStatement
