@@ -181,7 +181,7 @@ public class GridFragment extends Fragment {
 
     public class LoadApi extends AsyncTask<Void, Void, Void> {
 
-        Boolean empty = false;
+        boolean empty = false;
 
         @Override
         protected void onPreExecute() {
@@ -319,6 +319,7 @@ public class GridFragment extends Fragment {
                 empty = true;
             }
 
+            client = null;
             return null;
         }
 
